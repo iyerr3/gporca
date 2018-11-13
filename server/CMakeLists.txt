@@ -48,7 +48,7 @@ endfunction()
 set(MDP_GROUPS "
 
 CSemiJoinTest:
-SemiJoin2InnerJoin SemiJoin2Select-1 SemiJoin2Select-2 SemiJoin2Select-EnforceSubplan
+SemiJoin2InnerJoin SemiJoin2Select-1 SemiJoin2Select-EnforceSubplan
 InSubqWithPrjListOuterRefNoInnerRefColumnIn InSubqWithPrjListOuterRefNoInnerRefConstIn
 NestedInSubqWithPrjListOuterRefNoInnerRef  InEqualityJoin Correlated-SemiJoin
 CorrelatedSemiJoin-True CorrelatedIN-LeftSemiJoin-True CorrelatedIN-LeftSemiNotIn-True

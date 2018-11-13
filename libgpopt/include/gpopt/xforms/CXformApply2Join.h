@@ -199,8 +199,11 @@ namespace gpopt
                  pexprPredicate
                  );
 
+                // normalize the tree and push down the predicates
+                CExpression *pexprNormalized = CNormalizer::PexprNormalize(mp, pexprResult);
+                pexprResult->Release();
                 // add alternative to results
-                pxfres->Add(pexprResult);
+                pxfres->Add(pexprNormalized);
             }
 
 			// helper function to create a join expression from an apply expression and insert alternative into results container

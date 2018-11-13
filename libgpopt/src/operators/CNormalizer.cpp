@@ -47,6 +47,7 @@ const CNormalizer::SPushThru CNormalizer::m_rgpt[] =
 	{COperator::EopLogicalLeftAntiSemiApply, PushThruJoin},
 	{COperator::EopLogicalLeftAntiSemiApplyNotIn, PushThruJoin},
 	{COperator::EopLogicalLeftAntiSemiCorrelatedApplyNotIn, PushThruJoin},
+	{COperator::EopLogicalLeftSemiJoin, PushThruJoin},
 };
 
 
@@ -74,7 +75,9 @@ CNormalizer::FPushThruOuterChild
 		COperator::EopLogicalLeftOuterApply == op_id ||
 		COperator::EopLogicalLeftOuterCorrelatedApply == op_id ||
 		CUtils::FLeftAntiSemiApply(pexprLogical->Pop()) ||
-		CUtils::FLeftSemiApply(pexprLogical->Pop());
+		CUtils::FLeftSemiApply(pexprLogical->Pop()) ||
+		COperator::EopLogicalLeftSemiJoin == op_id;
+	;
 }
 
 
