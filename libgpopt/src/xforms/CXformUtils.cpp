@@ -91,17 +91,25 @@ CXformUtils::ExfpSemiJoin2CrossProduct
 	CColRefSet *pcrsUsed = exprhdl.GetDrvdScalarProps(2 /*child_index*/)->PcrsUsed();
 	CColRefSet *pcrsOuterOutput = exprhdl.GetRelationalProperties(0 /*child_index*/)->PcrsOutput();
 
-	// For Semi Join we have already done normalization, so can there be some check which is missing
-	// here?
-	// Handle only for EopLogicalLeftSemiJoin as we have added normalization only in it.
-	// We should handle for all others.
-	if (COperator::EopLogicalLeftSemiJoin == op_id && (pcrsOuterOutput->ContainsAll(pcrsUsed) || pcrsUsed->Size() == 0))
+
+	// Only for LogicalLeftSemiJoin, we perform nomalization. So Handle the condition accordingly
+	if (COperator::EopLogicalLeftSemiJoin == op_id)
 	{
-		return CXform::ExfpHigh;
+		if (pcrsOuterOutput->ContainsAll(pcrsUsed) || pcrsUsed->Size() == 0)
+		{
+			return CXform::ExfpHigh;
+		}
+		return CXform::ExfpNone;
 	}
 
-	// xform is inapplicable of join predicate uses columns from join's inner child
-	return CXform::ExfpNone;
+	if (pcrsUsed->Size() == 0 || !pcrsOuterOutput->ContainsAll(pcrsUsed))
+	{
+		// xform is inapplicable of join predicate uses columns from join's inner child
+		return CXform::ExfpNone;
+	}
+	return CXform::ExfpHigh;
+
+
 }
 
 
