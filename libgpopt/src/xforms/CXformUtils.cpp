@@ -102,6 +102,7 @@ CXformUtils::ExfpSemiJoin2CrossProduct
 		return CXform::ExfpNone;
 	}
 
+	// if the size is 0, it means the join condtion is scalar const? so why can't we apply this??
 	if (pcrsUsed->Size() == 0 || !pcrsOuterOutput->ContainsAll(pcrsUsed))
 	{
 		// xform is inapplicable of join predicate uses columns from join's inner child

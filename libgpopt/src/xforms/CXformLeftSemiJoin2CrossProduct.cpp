@@ -108,7 +108,9 @@ CXformLeftSemiJoin2CrossProduct::Transform
 		IDatum *limitCountDatum = CScalarConst::PopConvert(pexprLimitCount->Pop())->GetDatum();
 		CExpression *pexprLimitCountRef = CUtils::PexprScalarConstInt8(mp, 1 /*count*/);
 		IDatum *limitCount1Datum = CScalarConst::PopConvert(pexprLimitCountRef->Pop())->GetDatum();
-		if (limitCount1Datum->StatsAreEqual(limitCountDatum))
+		BOOL limit_one_exists = limitCount1Datum->StatsAreEqual(limitCountDatum);
+		pexprLimitCountRef->Release();
+		if (limit_one_exists)
 		{
 			// already a limit exists with count 1
 			return;
