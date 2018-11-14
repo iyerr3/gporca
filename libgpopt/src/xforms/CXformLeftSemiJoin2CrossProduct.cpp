@@ -98,6 +98,22 @@ CXformLeftSemiJoin2CrossProduct::Transform
 	CExpression *pexprOuter = (*pexpr)[0];
 	CExpression *pexprInner = (*pexpr)[1];
 	CExpression *pexprScalar = (*pexpr)[2];
+
+	// if a limit 1 already exists on the Inner Child, then we don't need
+	// to create another alternative with limit on top of it
+	// TODO: We can potential have a better way to check
+	if (COperator::EopLogicalLimit == pexprInner->Pop()->Eopid())
+	{
+		CExpression *pexprLimitCount = (*pexpr)[2];
+		IDatum *limitCountDatum = CScalarConst::PopConvert(pexprLimitCount->Pop())->GetDatum();
+		CExpression *pexprLimitCountRef = CUtils::PexprScalarConstInt8(mp, 1 /*count*/);
+		IDatum *limitCount1Datum = CScalarConst::PopConvert(pexprLimitCountRef->Pop())->GetDatum();
+		if (limitCount1Datum->StatsAreEqual(limitCountDatum))
+		{
+			// already a limit exists with count 1
+			return;
+		}
+	}
 	pexprOuter->AddRef();
 	pexprInner->AddRef();
 	pexprScalar->AddRef();
